@@ -1,16 +1,17 @@
 
 public class Polygon {
 
-	private Point[] _vertices = null;
+	private Point[] _vertices;
 	private int _noOfVertices;
 	
-	private final byte MAX_OF_VERTICES = 10;
-	
+	private final int MAX_OF_VERTICES = 10;
+	private final int DEFAULT_ZERO = 0;
+
 	
 	public Polygon () {
 		
 		_vertices = new Point [MAX_OF_VERTICES];
-		_noOfVertices = 0;
+		_noOfVertices = DEFAULT_ZERO;
 	}
 	
 	/**
@@ -20,18 +21,23 @@ public class Polygon {
 	 * @return true if the insertion made succesfuly, else false;
 	 */
 	public boolean addVertex (double x , double y) {
-			
-		Point newVertex = new Point(x , y);
+				
+		if ( _noOfVertices == MAX_OF_VERTICES )
+			return false;
 		
+		_vertices[ _noOfVertices++ ] = new Point(x , y);
+		return true;
+	/*	
 		for (int i = 0; i< _vertices.length ; i++) {
 			
 			if ( _vertices[i].equals(null) ) {
-				_vertices[i] = newVertex;
+				_vertices[i] = new Point(x , y);
 				_noOfVertices++ ;
 				return true;
 			}	
 		}
-		return false;
+		
+	*/
 	}
 	
 	/**
@@ -39,12 +45,14 @@ public class Polygon {
 	 * @return a copy of the Point with the highest Y value - the highest Point
 	 */
 	public Point highestVertex () {
-			
-		double highestYValue = 0 ;
-		int indexOfHighestY = 0 ;
 		
+		
+		double highestYValue = 0 ;
+		double indexOfHighestY = 0 ;
+		Point highestPoint = _vertices[0] ;
+		/*
 		// check if the first element in the array is null
-		if ( _vertices[0].equals(null) )
+		if ( _noOfVertices == 0 )
 			return null;
 		
 		// iterate over all array, and check all y values and keep their indexes. 
@@ -56,6 +64,22 @@ public class Polygon {
 			}
 		}
 		return new Point( _vertices[ indexOfHighestY ] );
+		
+		*/
+		
+		// check if the first element in the array is null
+				if ( _noOfVertices == DEFAULT_ZERO )
+					return null;
+		// iterate over all array, and check all y values and keep their indexes. 
+				for( int i =1; i< _noOfVertices ; i++) {
+					
+					if (  _vertices[i].isAbove( highestPoint ) ) {
+						highestPoint = _vertices[i] ; //assign Max y value found until now
+					}
+				}
+				return new Point( highestPoint );
+					
+		
 	}
 	
 	
@@ -67,7 +91,7 @@ public class Polygon {
 		
 		String finalOutput = "";
 		
-		if ( _noOfVertices == 0)
+		if ( _noOfVertices == DEFAULT_ZERO)
 			return "The polygon has 0 vertices";
 		
 		finalOutput += "The polygon has "+ _noOfVertices +" vertices: " ; // first Line of output
@@ -78,4 +102,43 @@ public class Polygon {
 		
 		return finalOutput + ")";
 	}
+
+	/**
+	 * The method will calculate and return the Perimeter of the Polygon
+	 * @return the perimeter of the all the Polygon
+	 */
+	public double calcPerimeter() {
+		
+		double returnedPerimeter = DEFAULT_ZERO;
+		final int oneVertex = DEFAULT_ZERO + 1;
+		final int twoVertexes = oneVertex + 1;
+		
+
+		switch ( _noOfVertices ) {
+		
+		case DEFAULT_ZERO : // no vertexes
+				return returnedPerimeter;
+		
+		case oneVertex : // 1 vertex
+				return returnedPerimeter;
+		
+		case twoVertexes : // 2 vertexes
+				returnedPerimeter = _vertices[DEFAULT_ZERO].distance( _vertices[oneVertex] );
+		
+		default: // more than 2 vertexes
+			for( int i = 0; i < _noOfVertices - 1 ; i++ ) {
+				// calculate the distance between all the vertexes, except the distance between the first and last vertexes.
+				returnedPerimeter += _vertices[i].distance( _vertices[i + 1] ); 
+			}
+			// calculate the distance betweent the first and last Vertexes
+			returnedPerimeter += _vertices[DEFAULT_ZERO].distance( _vertices[_noOfVertices - 1] );	
+		}
+		
+		// return the Perimeter after calculation 
+		return returnedPerimeter;
+		
+	}
 }
+
+
+
