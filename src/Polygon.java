@@ -26,20 +26,9 @@ public class Polygon {
 			return false;
 		
 		_vertices[ _noOfVertices ] = new Point(x , y);
-		_noOfVertices++; // update nomber of Vertices
+		_noOfVertices++; // update number of Vertices
 		
 		return true;
-	/*	
-		for (int i = 0; i< _vertices.length ; i++) {
-			
-			if ( _vertices[i].equals(null) ) {
-				_vertices[i] = new Point(x , y);
-				_noOfVertices++ ;
-				return true;
-			}	
-		}
-		
-	*/
 	}
 	
 	/**
@@ -55,12 +44,12 @@ public class Polygon {
 					return null;
 		// iterate over all array, and check all y values and keep their indexes. 
 		for( int i = 1; i< _noOfVertices ; i++) {
-					
-			if (  _vertices[i].isAbove( highestPoint ) ) {
+		
+			if (  _vertices[i].isAbove( highestPoint ) ) 
 					highestPoint = _vertices[i] ; //assign Max y value found until now
-				}
-			}
-				return new Point( highestPoint );  // return new Point Object as a copy of the higest Point
+		}
+		
+		return new Point( highestPoint );  // return new Point Object as a copy of the higest Point
 	}
 	
 	
@@ -94,28 +83,29 @@ public class Polygon {
 		final int oneVertex = DEFAULT_ZERO + 1;
 		final int twoVertices = oneVertex + 1;
 		
-
+		// use switch to differ the different scenarios of vertices
+		// 0, 1 ,2 , more than 2 vertices
 		switch ( _noOfVertices ) {
 		
 		case DEFAULT_ZERO : // no vertexes
-				return returnedPerimeter;
+				return DEFAULT_ZERO;
 		
 		case oneVertex : // 1 vertex
-				return returnedPerimeter;
+				return DEFAULT_ZERO;
 		
 		case twoVertices : // 2 vertexes
 				returnedPerimeter = _vertices[DEFAULT_ZERO].distance( _vertices[oneVertex] );
-		
+ 
 		default: // more than 2 vertexes
-			for( int i = 0; i < _noOfVertices - 1 ; i++ ) {
-				// calculate the distance between all the Vertices, except the distance between the first and last vertexes.
-				returnedPerimeter += _vertices[i].distance( _vertices[i + 1] ); 
-			}
-			// calculate the distance between the first and last Vertices
-			returnedPerimeter += _vertices[DEFAULT_ZERO].distance( _vertices[_noOfVertices - 1] );	
+				for( int i = 0; i < _noOfVertices - 1 ; i++ ) 
+					// calculate the distance between all the Vertices, except the distance between the first and last vertexes.
+					returnedPerimeter += _vertices[i].distance( _vertices[i + 1] ); 
+				
+				// calculate the distance between the first and last Vertices
+				returnedPerimeter += _vertices[DEFAULT_ZERO].distance( _vertices[_noOfVertices - 1] );	
 		}
 		
-		// return the Perimeter after calculation 
+		// return the Perimeter after calculation in any case matched
 		return returnedPerimeter;
 	}
 	
@@ -136,7 +126,7 @@ public class Polygon {
 		sideC = pointB.distance( pointC );
 		
 		// calculate semi premieter of the triangle
-		semiPerimeter = ( sideA + sideB + sideC ) / 2;
+		semiPerimeter = ( sideA + sideB + sideC ) / 2 ;
 		
 		// call the inner multiplication between the Parenthesis
 		innerMultipli = ( semiPerimeter - sideA ) * ( semiPerimeter - sideB ) * ( semiPerimeter - sideC );
@@ -146,11 +136,15 @@ public class Polygon {
 		return currentTriangle;
 	}
 
+	/**
+	 *  The method will calculate the Area of the Polygon using the Heron Formula
+	 * @return a number represent the Area of the Polygon
+	 */
 	public double calcArea() {
 		
 		double totalArea = DEFAULT_ZERO;
 		
-		Point firstVertex = _vertices[0]; // first Point, to calculate the  
+		Point firstVertex = _vertices[DEFAULT_ZERO]; // first Point, to calculate the  
 				
 		if( _noOfVertices < 3)
 			return DEFAULT_ZERO;
@@ -160,6 +154,42 @@ public class Polygon {
 		    totalArea += heronCalcuteAreaOfTriangle( firstVertex, _vertices[i], _vertices[i + 1]);
 		
 		return totalArea;
+	}
+	
+	
+	public boolean isBigger( Polygon other ) {
+		
+		// calculate the expression, using the calcArea method, used the 'this' for more readabilty
+		boolean imBiggerPolygon = this.calcArea() > other.calcArea();
+		
+		return imBiggerPolygon;
+	}
+	
+	/**
+	 * 
+	 * @param p represent a new point to find in the Array of vertices
+	 * @return the index of the matched point if matched, else -1.
+	 */
+	public int findVertex( Point p ) {
+		
+		int matchedPointIndex = DEFAULT_ZERO ;
+		final int RESULT_IF_NOT_FOUND = -1 ;
+		
+		boolean found = false;
+		
+		for( int i = 0; i < _noOfVertices; i++ ) {
+			
+			if( _vertices[i].equals( p )) {
+				matchedPointIndex = i;
+				found = true;
+			}
+		}
+		
+		if ( ! found ) 
+			return  RESULT_IF_NOT_FOUND;
+		
+		return matchedPointIndex;
+					
 	}
 }
 
