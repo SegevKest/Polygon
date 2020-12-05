@@ -1,4 +1,9 @@
-
+/**
+ * Polygon Class
+ * Represent a Polygon in the Polar System - by array of Vertexes
+ * @author Segev Kestenbaum
+ * @version 05.12.2020
+*/
 public class Polygon {
 
 	private Point[] _vertices;
@@ -13,6 +18,9 @@ public class Polygon {
 		_vertices = new Point [MAX_OF_VERTICES];
 		_noOfVertices = DEFAULT_ZERO;
 	}
+	
+	
+	
 	
 	/**
 	 * The method will try to add a new vertex to the Array
@@ -30,6 +38,8 @@ public class Polygon {
 		
 		return true;
 	}
+	
+	
 	
 	/**
 	 * the method will return a copy of the Vertex that is the highest in the Polygon
@@ -53,6 +63,8 @@ public class Polygon {
 	}
 	
 	
+	
+	
 	/**
 	 * overrides the existing toString method
 	 * @return the string will contain a sentence of explanation with the coordinates
@@ -73,6 +85,9 @@ public class Polygon {
 		return finalOutput + ")";
 	}
 
+	
+	
+	
 	/**
 	 * The method will calculate and return the Perimeter of the Polygon
 	 * @return the perimeter of the all the Polygon
@@ -95,6 +110,7 @@ public class Polygon {
 		
 		case twoVertices : // 2 vertexes
 				returnedPerimeter = _vertices[DEFAULT_ZERO].distance( _vertices[oneVertex] );
+				break;
  
 		default: // more than 2 vertexes
 				for( int i = 0; i < _noOfVertices - 1 ; i++ ) 
@@ -108,6 +124,9 @@ public class Polygon {
 		// return the Perimeter after calculation in any case matched
 		return returnedPerimeter;
 	}
+	
+	
+	
 	
 	// private method to calculate the area of a triangle using the Heron formula
 	// using all sides of triangle and semiperimeter of the polygon
@@ -136,6 +155,9 @@ public class Polygon {
 		return currentTriangle;
 	}
 
+	
+	
+	
 	/**
 	 *  The method will calculate the Area of the Polygon using the Heron Formula
 	 * @return a number represent the Area of the Polygon
@@ -153,12 +175,19 @@ public class Polygon {
 		
 		for ( int i = 1; i < _noOfVertices - 1; i ++ ) 
 			// add every triangle area to the total are - calculate using the private method, with the semiperimeter.
-		    totalArea += heronCalcuteAreaOfTriangle( firstVertex, _vertices[i], _vertices[i + 1]);
+		    totalArea += this.heronCalcuteAreaOfTriangle( firstVertex, _vertices[i], _vertices[i + 1]);
 		
 		return totalArea;
 	}
 	
 	
+	
+	/**
+	 * The method will check if the current Polygon is bigger than the parameter Polygon
+	 * by checking which area is bigger.
+	 * @param other a new Polygon to check areas with the current Polygon
+	 * @return true if the current Polygon is bigger that the Parameter 
+	 */
 	public boolean isBigger( Polygon other ) {
 		
 		// calculate the expression, using the calcArea method, used the 'this' for more readabilty
@@ -166,6 +195,10 @@ public class Polygon {
 		
 		return imBiggerPolygon;
 	}
+	
+	
+	
+	
 	
 	/**
 	 * The method will try to find a given point in between the vertices - if found - returns true, else - false.
@@ -194,6 +227,9 @@ public class Polygon {
 		return matchedPointIndex;				
 	}
 	
+	
+	
+	
 	/**
 	 * The method will return the next Point in the Polygon, after the given point,
 	 * If the Point given is not exist in the polygon, - return null;
@@ -221,6 +257,89 @@ public class Polygon {
 		
 		// if all the conditions above did not occur - return a copy of the next point in the array
 		return new Point( _vertices [ indexOfParamPoint + 1] );
+	}
+	
+	
+	
+	// the private method will return the point located at the exterme end of each side of the polyon
+	// the most right point, the most left point and the bottom point
+	private Point returnEndPointByRequest( String sideOfEndPoint ) {
+		
+		Point returnedPoint = _vertices[0] ;
+		
+		// in case of string equals : Left, Right , Bottom
+		switch ( sideOfEndPoint ) {
+		
+			case "Left":
+				// find the most left Point in the Polygon 
+				for( int i = 1; i< _noOfVertices ; i++) {
+					if (  _vertices[i].isLeft( returnedPoint ) ) 
+							returnedPoint = _vertices[i] ; //assign left X value found until now
+				}
+				break;
+				
+			case "Right":
+				// find the most right Point in the Polygon 
+				for( int i = 1; i< _noOfVertices ; i++) {
+					if (  _vertices[i].isRight( returnedPoint ) ) 
+							returnedPoint = _vertices[i] ; //assign right X value found until now
+				}
+				break;
+			
+			case "Bottom":
+				// find the most lowest Point in the Polygon 
+				for( int i = 1; i< _noOfVertices ; i++) {
+					if (  _vertices[i].isUnder(returnedPoint) ) 
+							returnedPoint = _vertices[i] ; //assign lowest y value found until now
+				}
+				break;	
+		}
+
+		return new Point( returnedPoint );
+	}
+	
+	/**
+	 * The method will return a Polygon object - represent the bounding box rectangle to the polygon
+	 * @return Polygon Object - Bounding rectangle of the Polygon
+	 */
+	public Polygon getBoundingBox() {
+		
+		Polygon boundingBox = new Polygon();
+		
+		final int THREE_VERTICES = 3;
+		
+		// check if smaller than 3 vertices
+		if ( _noOfVertices < THREE_VERTICES )
+			return null;		
+		
+		// get the Y Value of the highest Point in the Polygon
+		double yValueOfhighestPoint = this.highestVertex().getY(); 
+		
+		// get the Y Value of the Lowest Point in the Polygon
+		double yValuelowestPoint = this.returnEndPointByRequest("Bottom").getY();
+		
+		// get the X Value of the Right Point in the Polygon
+		double xValueRightPoint = this.returnEndPointByRequest("Right").getX();
+
+		// get the X Value of the Left Point in the Polygon
+		double xValueLeftPoint = this.returnEndPointByRequest("Left").getX();
+		
+		
+		// Adding all the vertices to the Polygon 
+		
+		// first Vertex - Bottom Left
+		boundingBox.addVertex( xValueLeftPoint, yValuelowestPoint );
+		
+		// second Vertex - Bottom Right
+		boundingBox.addVertex( xValueRightPoint, yValuelowestPoint );
+		
+		// third Vertex - Top Right
+		boundingBox.addVertex( xValueRightPoint, yValueOfhighestPoint );
+		
+		// fourth Vertex - Top Left
+		boundingBox.addVertex( xValueLeftPoint, yValueOfhighestPoint );
+		
+		return boundingBox;
 	}
 }
 
