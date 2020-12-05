@@ -25,7 +25,9 @@ public class Polygon {
 		if ( _noOfVertices == MAX_OF_VERTICES )
 			return false;
 		
-		_vertices[ _noOfVertices++ ] = new Point(x , y);
+		_vertices[ _noOfVertices ] = new Point(x , y);
+		_noOfVertices++; // update nomber of Vertices
+		
 		return true;
 	/*	
 		for (int i = 0; i< _vertices.length ; i++) {
@@ -46,40 +48,19 @@ public class Polygon {
 	 */
 	public Point highestVertex () {
 		
-		
-		double highestYValue = 0 ;
-		double indexOfHighestY = 0 ;
 		Point highestPoint = _vertices[0] ;
-		/*
-		// check if the first element in the array is null
-		if ( _noOfVertices == 0 )
-			return null;
-		
-		// iterate over all array, and check all y values and keep their indexes. 
-		for( int i =0; i< _noOfVertices ; i++) {
-			
-			if (  _vertices[i].getY() > highestYValue ) {
-				highestYValue = _vertices[i].getY() ; //assign Max y value found until now
-				indexOfHighestY = i ; // keep the max y value point position in the Array
-			}
-		}
-		return new Point( _vertices[ indexOfHighestY ] );
-		
-		*/
 		
 		// check if the first element in the array is null
-				if ( _noOfVertices == DEFAULT_ZERO )
+		if ( _noOfVertices == DEFAULT_ZERO )
 					return null;
 		// iterate over all array, and check all y values and keep their indexes. 
-				for( int i =1; i< _noOfVertices ; i++) {
+		for( int i = 1; i< _noOfVertices ; i++) {
 					
-					if (  _vertices[i].isAbove( highestPoint ) ) {
-						highestPoint = _vertices[i] ; //assign Max y value found until now
-					}
+			if (  _vertices[i].isAbove( highestPoint ) ) {
+					highestPoint = _vertices[i] ; //assign Max y value found until now
 				}
-				return new Point( highestPoint );
-					
-		
+			}
+				return new Point( highestPoint );  // return new Point Object as a copy of the higest Point
 	}
 	
 	
@@ -111,7 +92,7 @@ public class Polygon {
 		
 		double returnedPerimeter = DEFAULT_ZERO;
 		final int oneVertex = DEFAULT_ZERO + 1;
-		final int twoVertexes = oneVertex + 1;
+		final int twoVertices = oneVertex + 1;
 		
 
 		switch ( _noOfVertices ) {
@@ -122,21 +103,63 @@ public class Polygon {
 		case oneVertex : // 1 vertex
 				return returnedPerimeter;
 		
-		case twoVertexes : // 2 vertexes
+		case twoVertices : // 2 vertexes
 				returnedPerimeter = _vertices[DEFAULT_ZERO].distance( _vertices[oneVertex] );
 		
 		default: // more than 2 vertexes
 			for( int i = 0; i < _noOfVertices - 1 ; i++ ) {
-				// calculate the distance between all the vertexes, except the distance between the first and last vertexes.
+				// calculate the distance between all the Vertices, except the distance between the first and last vertexes.
 				returnedPerimeter += _vertices[i].distance( _vertices[i + 1] ); 
 			}
-			// calculate the distance betweent the first and last Vertexes
+			// calculate the distance between the first and last Vertices
 			returnedPerimeter += _vertices[DEFAULT_ZERO].distance( _vertices[_noOfVertices - 1] );	
 		}
 		
 		// return the Perimeter after calculation 
 		return returnedPerimeter;
+	}
+	
+	// private method to calculate the area of a triangle using the Heron formula
+	// using all sides of triangle and semiperimeter of the polygon
+	private double heronCalcuteAreaOfTriangle( Point pointA, Point pointB, Point pointC ) {
 		
+		double sideA = DEFAULT_ZERO,  sideB = DEFAULT_ZERO, sideC = DEFAULT_ZERO, semiPerimeter = DEFAULT_ZERO;
+		double innerMultipli = DEFAULT_ZERO, currentTriangle = DEFAULT_ZERO;
+				
+		// calculate first side 
+		sideA = pointA.distance( pointB );
+		
+		// calculate second side 
+		sideB = pointA.distance( pointC );
+		
+		// calculate third side 
+		sideC = pointB.distance( pointC );
+		
+		// calculate semi premieter of the triangle
+		semiPerimeter = ( sideA + sideB + sideC ) / 2;
+		
+		// call the inner multiplication between the Parenthesis
+		innerMultipli = ( semiPerimeter - sideA ) * ( semiPerimeter - sideB ) * ( semiPerimeter - sideC );
+		
+		currentTriangle = Math.sqrt( semiPerimeter * innerMultipli );
+		
+		return currentTriangle;
+	}
+
+	public double calcArea() {
+		
+		double totalArea = DEFAULT_ZERO;
+		
+		Point firstVertex = _vertices[0]; // first Point, to calculate the  
+				
+		if( _noOfVertices < 3)
+			return DEFAULT_ZERO;
+		
+		for ( int i = 1; i < _noOfVertices - 1; i ++ ) 
+			// add every triangle area to the total are - calculate using the private method, with the semiperimeter.
+		    totalArea += heronCalcuteAreaOfTriangle( firstVertex, _vertices[i], _vertices[i + 1]);
+		
+		return totalArea;
 	}
 }
 
