@@ -143,10 +143,12 @@ public class Polygon {
 	public double calcArea() {
 		
 		double totalArea = DEFAULT_ZERO;
+		final int THREE_VERTICES = 3;
 		
 		Point firstVertex = _vertices[DEFAULT_ZERO]; // first Point, to calculate the  
 				
-		if( _noOfVertices < 3)
+		// if there are less than 3 vertices - return 0
+		if( _noOfVertices < THREE_VERTICES)
 			return DEFAULT_ZERO;
 		
 		for ( int i = 1; i < _noOfVertices - 1; i ++ ) 
@@ -166,7 +168,7 @@ public class Polygon {
 	}
 	
 	/**
-	 * 
+	 * The method will try to find a given point in between the vertices - if found - returns true, else - false.
 	 * @param p represent a new point to find in the Array of vertices
 	 * @return the index of the matched point if matched, else -1.
 	 */
@@ -177,10 +179,11 @@ public class Polygon {
 		
 		boolean found = false;
 		
-		for( int i = 0; i < _noOfVertices; i++ ) {
+		for( int i = 0; i < _noOfVertices && ! found ; i++ ) {
 			
+			// check if any of the vertices is equal to the Point parameter
 			if( _vertices[i].equals( p )) {
-				matchedPointIndex = i;
+				matchedPointIndex = i; // saves the Index in the 
 				found = true;
 			}
 		}
@@ -188,8 +191,36 @@ public class Polygon {
 		if ( ! found ) 
 			return  RESULT_IF_NOT_FOUND;
 		
-		return matchedPointIndex;
-					
+		return matchedPointIndex;				
+	}
+	
+	/**
+	 * The method will return the next Point in the Polygon, after the given point,
+	 * If the Point given is not exist in the polygon, - return null;
+	 * @param p
+	 * @return
+	 */
+	public Point getNextVertex(Point p) {
+		
+		final int SINGLE_VERTEX = 1;
+		
+		// get the index of the Point given as parameter
+		int indexOfParamPoint = this.findVertex( p );		
+		
+		// evaluate these expressions
+		boolean isPointExistInPolygon =  indexOfParamPoint >= DEFAULT_ZERO ;
+		boolean isPointLastInPolygon = p.equals( _vertices[ _noOfVertices - 1] ); 
+		
+		// if the Point does not belongs to the Polygon - return null
+		if ( ! isPointExistInPolygon )
+			return null;
+		 
+		// if there is only single vertex OR the point given is the last in the Array - return the first vertex in the Array
+		if( _noOfVertices == SINGLE_VERTEX  || isPointLastInPolygon )
+			return new Point ( _vertices[DEFAULT_ZERO ] );
+		
+		// if all the conditions above did not occur - return a copy of the next point in the array
+		return new Point( _vertices [ indexOfParamPoint + 1] );
 	}
 }
 
