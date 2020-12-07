@@ -112,7 +112,9 @@ public class Point {
 		// calculate the X value, by the Math.cos() function
 		xCoordinate = Math.cos(convertedAlpha) * _radius;
 		
-		return xCoordinate;
+		return roundCoordinate(xCoordinate);
+
+		//return xCoordinate;
 	}
 	
 	/**
@@ -129,7 +131,9 @@ public class Point {
 		// calculate the Y value, by the Math.Sin() function
 		yCoordinate = Math.sin(convertedAlpha) * _radius;
 		
-		return yCoordinate;
+		
+		return roundCoordinate(yCoordinate);
+		//return yCoordinate;
 	}
 	
 	/**

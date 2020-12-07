@@ -13,13 +13,15 @@ public class Polygon {
 	private final int DEFAULT_ZERO = 0;
 
 	
+	/**
+	 * Constructor of the class
+	 * Initiate all private attributes of Class
+	 */
 	public Polygon () {
 		
 		_vertices = new Point [MAX_OF_VERTICES];
 		_noOfVertices = DEFAULT_ZERO;
 	}
-	
-	
 	
 	
 	/**
@@ -56,7 +58,7 @@ public class Polygon {
 		for( int i = 1; i< _noOfVertices ; i++) {
 		
 			if (  _vertices[i].isAbove( highestPoint ) ) 
-					highestPoint = _vertices[i] ; //assign Max y value found until now
+				highestPoint = _vertices[i] ; //assign Max y value found until now
 		}
 		
 		return new Point( highestPoint );  // return new Point Object as a copy of the higest Point
@@ -74,9 +76,9 @@ public class Polygon {
 		String finalOutput = "";
 		
 		if ( _noOfVertices == DEFAULT_ZERO)
-			return "The polygon has 0 vertices";
+			return "The polygon has 0 vertices.";
 		
-		finalOutput += "The polygon has "+ _noOfVertices +" vertices: " ; // first Line of output
+		finalOutput += "The polygon has "+ _noOfVertices +" vertices:\n" ; // first Line of output
 		finalOutput +=  "(" + _vertices[0].toString();
 		
 		for( int i = 1; i < _noOfVertices ; i++ ) 		
@@ -102,17 +104,17 @@ public class Polygon {
 		// 0, 1 ,2 , more than 2 vertices
 		switch ( _noOfVertices ) {
 		
-		case DEFAULT_ZERO : // no vertexes
+		case DEFAULT_ZERO : // no vertices
 				return DEFAULT_ZERO;
 		
 		case oneVertex : // 1 vertex
 				return DEFAULT_ZERO;
 		
-		case twoVertices : // 2 vertexes
+		case twoVertices : // 2 vertices
 				returnedPerimeter = _vertices[DEFAULT_ZERO].distance( _vertices[oneVertex] );
 				break;
  
-		default: // more than 2 vertexes
+		default: // more than 2 vertices
 				for( int i = 0; i < _noOfVertices - 1 ; i++ ) 
 					// calculate the distance between all the Vertices, except the distance between the first and last vertexes.
 					returnedPerimeter += _vertices[i].distance( _vertices[i + 1] ); 
@@ -209,7 +211,6 @@ public class Polygon {
 		
 		int matchedPointIndex = DEFAULT_ZERO ;
 		final int RESULT_IF_NOT_FOUND = -1 ;
-		
 		boolean found = false;
 		
 		for( int i = 0; i < _noOfVertices && ! found ; i++ ) {
@@ -239,17 +240,20 @@ public class Polygon {
 	public Point getNextVertex(Point p) {
 		
 		final int SINGLE_VERTEX = 1;
+		boolean isPointExistInPolygon, isPointLastInPolygon;
 		
 		// get the index of the Point given as parameter
 		int indexOfParamPoint = this.findVertex( p );		
 		
 		// evaluate these expressions
-		boolean isPointExistInPolygon =  indexOfParamPoint >= DEFAULT_ZERO ;
-		boolean isPointLastInPolygon = p.equals( _vertices[ _noOfVertices - 1] ); 
+		isPointExistInPolygon =  indexOfParamPoint >= DEFAULT_ZERO ;
 		
 		// if the Point does not belongs to the Polygon - return null
 		if ( ! isPointExistInPolygon )
 			return null;
+		
+		isPointLastInPolygon = p.equals( _vertices[ _noOfVertices - 1] ); 
+		
 		 
 		// if there is only single vertex OR the point given is the last in the Array - return the first vertex in the Array
 		if( _noOfVertices == SINGLE_VERTEX  || isPointLastInPolygon )
