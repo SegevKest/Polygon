@@ -122,7 +122,9 @@ public class PolygonStudentsTester {
 	
     public static void main(String[] args) {
 
-    	//teachersTester();
+    	teachersTester();
+        System.out.println(" ____________________________________________________________________________________________________ ");
+
     	student1Test();
   }
 }

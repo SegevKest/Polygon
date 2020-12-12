@@ -44,7 +44,7 @@ public class Polygon {
 	
 	
 	/**
-	 * the method will return a copy of the Vertex that is the highest in the Polygon
+	 * The method will return a copy of the Vertex that is the highest in the Polygon
 	 * @return a copy of the Point with the highest Y value - the highest Point
 	 */
 	public Point highestVertex () {
@@ -68,7 +68,7 @@ public class Polygon {
 	
 	
 	/**
-	 * overrides the existing toString method
+	 * Overrides the existing toString method
 	 * @return the string will contain a sentence of explanation with the coordinates
 	 */
 	public String toString() {
@@ -234,8 +234,8 @@ public class Polygon {
 	/**
 	 * The method will return the next Point in the Polygon, after the given point,
 	 * If the Point given is not exist in the polygon, - return null;
-	 * @param p
-	 * @return
+	 * @param p represent a point, if exist in the Array of polygon
+	 * @return the next point in the Array after the parameter point, if not exist - return null
 	 */
 	public Point getNextVertex(Point p) {
 		
