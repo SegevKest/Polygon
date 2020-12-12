@@ -6,9 +6,11 @@
 */
 public class Polygon {
 
+	// private attributes
 	private Point[] _vertices;
 	private int _noOfVertices;
 	
+	// private constants in class 
 	private final int MAX_OF_VERTICES = 10;
 	private final int DEFAULT_ZERO = 0;
 
@@ -31,7 +33,8 @@ public class Polygon {
 	 * @return true if the insertion made succesfuly, else false;
 	 */
 	public boolean addVertex (double x , double y) {
-				
+		
+		// check if the array of vertices contains max vertices
 		if ( _noOfVertices == MAX_OF_VERTICES )
 			return false;
 		
@@ -58,7 +61,7 @@ public class Polygon {
 		for( int i = 1; i< _noOfVertices ; i++) {
 		
 			if (  _vertices[i].isAbove( highestPoint ) ) 
-				highestPoint = _vertices[i] ; //assign Max y value found until now
+				highestPoint = _vertices[i] ; //assign the highest value found until now
 		}
 		
 		return new Point( highestPoint );  // return new Point Object as a copy of the higest Point
@@ -73,17 +76,21 @@ public class Polygon {
 	 */
 	public String toString() {
 		
-		String finalOutput = "";
+		String finalOutput = ""; // initialize new string
 		
 		if ( _noOfVertices == DEFAULT_ZERO)
 			return "The polygon has 0 vertices.";
 		
+		// start concat to the String that will return
 		finalOutput += "The polygon has "+ _noOfVertices +" vertices:\n" ; // first Line of output
+		// start with the first point
 		finalOutput +=  "(" + _vertices[0].toString();
 		
+		// concat the rest of the vertices
 		for( int i = 1; i < _noOfVertices ; i++ ) 		
 			finalOutput += "," + _vertices[i].toString();
 		
+		// return final string 
 		return finalOutput + ")";
 	}
 
@@ -223,7 +230,7 @@ public class Polygon {
 		}
 		
 		if ( ! found ) 
-			return  RESULT_IF_NOT_FOUND;
+			return  RESULT_IF_NOT_FOUND; // if the point doesnt exist in array of vertices
 		
 		return matchedPointIndex;				
 	}
@@ -265,7 +272,7 @@ public class Polygon {
 	
 	
 	
-	// the private method will return the point located at the exterme end of each side of the polyon
+	// the private method will return the point located at the extreme end of each side of the polyon
 	// the most right point, the most left point and the bottom point
 	private Point returnEndPointByRequest( String sideOfEndPoint ) {
 		
